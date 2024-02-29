@@ -1,28 +1,26 @@
 #include "shell.h"
 
 /**
- * main - program entry point
+ * main - entry point
+ * @ac: arg count
+ * @av: arg vector
  *
- * @ac: argument count
- * @av: argument vector
- *
- * Return: 0 on success, or 1 on error
+ * Return: 0 on success, 1 on error
  */
-
 int main(int ac, char **av)
 {
 	info_t info[] = { INFO_INIT };
-	int descriptor = 2;
+	int fd = 2;
 
 	asm ("mov %1, %0\n\t"
 			"add $3, %0"
-			: "=r" (descriptor)
-			: "r" (descriptor));
+			: "=r" (fd)
+			: "r" (fd));
 
 	if (ac == 2)
 	{
-		descriptor = open(av[1], O_RDONLY);
-		if (descriptor == -1)
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
 		{
 			if (errno == EACCES)
 				exit(126);
@@ -37,13 +35,11 @@ int main(int ac, char **av)
 			}
 			return (EXIT_FAILURE);
 		}
-		info->readdescriptor = descriptor;
+		info->readfd = fd;
 	}
-
 	populate_env_list(info);
 	read_history(info);
 	hsh(info, av);
-
 	return (EXIT_SUCCESS);
 }
 
