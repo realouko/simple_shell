@@ -4,7 +4,8 @@
  * get_history_file - Returns the history file path.
  * @info: Structure containing potential arguments.
  *
- * Return: Allocated string containing the history file path, or NULL on failure.
+ * Return: Allocated string containing the
+ * history file path, or NULL on failure.
  */
 char *get_history_file(info_t *info)
 {
@@ -13,7 +14,6 @@ char *get_history_file(info_t *info)
 	dir = _getenv(info, "HOME=");
 	if (!dir)
 		return (NULL);
-	
 	buf = malloc(sizeof(char) * (_strlen(dir) + _strlen(HIST_FILE) + 2));
 	if (!buf)
 	{
@@ -24,7 +24,6 @@ char *get_history_file(info_t *info)
 	_strcpy(buf, dir);
 	_strcat(buf, "/");
 	_strcat(buf, HIST_FILE);
-	
 	return (buf);
 }
 
@@ -38,17 +37,14 @@ int write_history(info_t *info)
 {
 	ssize_t fd;
 	char *filename = get_history_file(info);
-	list_t *node = NULL;
 	
+	list_t *node = NULL;
 	if (!filename)
 		return (-1);
-	
 	fd = open(filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
 	free(filename);
-	
 	if (fd == -1)
 		return (-1);
-	
 	for (node = info->history; node; node = node->next)
 	{
 		_putsfd(node->str, fd);
@@ -74,10 +70,8 @@ int read_history(info_t *info)
 	
 	if (!filename)
 		return (0);
-	
 	fd = open(filename, O_RDONLY);
 	free(filename);
-	
 	if (fd == -1)
 		return (0);
 	if (!fstat(fd, &st))
@@ -107,27 +101,30 @@ int read_history(info_t *info)
 		if (buf[j] == '\n')
 		{
 			buf[j] = 0;
-			build_history_list(info, buf + last, linecount++);
+		build_history_list(info,
+	buf + last, linecount++);
 			last = j + 1;
 		}
 	}
 	if (last != j)
 	{
-		build_history_list(info, buf + last, linecount++);
+		build_history_list(info,
+	buf + last, linecount++);
 	}
 	free(buf);
 	info->histcount = linecount;
-	
-	while (info->histcount-- >= HIST_MAX)
+while (info->histcount-- >= HIST_MAX)
 	{
-		delete_node_at_index(&(info->history), 0);
+		delete_node_at_index
+		(&(info->history), 0);
 	}
 	renumber_history(info);
 	return (info->histcount);
 }
 
 /**
- * build_history_list - Creates a new entry in a history-linked list.
+ * build_history_list - Creates a
+ * new entry in a history-linked list.
  * @info: Structure containing potential arguments.
  * @buf: Buffer containing the history entry.
  * @linecount: History line count.
@@ -150,7 +147,8 @@ int build_history_list(info_t *info, char *buf, int linecount)
 }
 
 /**
- * renumber_history - Renumbers the history linked list.
+ * renumber_history - Renumbers
+ * the history linked list.
  * @info: Structure containing potential arguments.
  *
  * Return: The new histcount.
@@ -167,4 +165,5 @@ int renumber_history(info_t *info)
 	}
 	return (info->histcount = j);
 }
-					
+
+
